@@ -1,0 +1,21 @@
+Movies
+	Movie_ID INT NOT NULL,
+	Movie_Name VARCHAR ( 50 ) UNIQUE NOT NULL,
+	Direcetor VARCHAR ( 50 ) NOT NULL,
+	Genre VARCHAR ( 50 )  NOT NULL,
+	Stars VARCHAR ( 50 )  NOT NULL,
+	Rating  float  NOT NULL,
+	IMDB_ranking VARCHAR ( 50 ) UNIQUE NOT NULL,
+	Awards VARCHAR ( 50 )  NOT NULL,
+	Movie_Year INT NOT NULL,
+	Movie_Length INTERVAL NOT NULL,
+	PRIMARY KEY (Movie_ID)
+
+Actors
+	actor_ID INT NOT NULL,
+	Actor_Name VARCHAR ( 50 ) UNIQUE NOT NULL,
+	CountryFrom VARCHAR ( 50 ) NOT NULL,
+	Awards VARCHAR ( 50 ) NOT NULL,
+	BestRatedFilmAppearanceID INT NOT NULL,
+	PRIMARY KEY (Movie_ID),
+	FOREIGN KEY (BestRatedFilmAppearanceID) REFERENCES Movies(Movie_ID)
