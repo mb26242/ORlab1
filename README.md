@@ -1,10 +1,10 @@
 Top 10 movies rated by IMDB
 
-License: Commercial Use - IMDB, see under License
+License: Data courtesy of IMDB, see under License
 
 Author: Marko Bunic
 
-Version: 0
+Version: 1.0
 
 Created for: Educational use, Faculty project
 
