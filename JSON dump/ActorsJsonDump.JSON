@@ -1,0 +1,4 @@
+"row_to_json"
+"{""actor_id"":1001,""actor_name"":""Morgan Freeman"",""countryfrom"":""USA"",""awards"":""1 Oscar, 65 other wins"",""bestratedfilmappearanceid"":101}"
+"{""actor_id"":1002,""actor_name"":""Marlon Brando"",""countryfrom"":""USA"",""awards"":""2 Oscars, 32 other wins"",""bestratedfilmappearanceid"":102}"
+"{""actor_id"":1003,""actor_name"":""Clint Eastwood"",""countryfrom"":""USA"",""awards"":""4 Oscars, another 154 wins"",""bestratedfilmappearanceid"":110}"
