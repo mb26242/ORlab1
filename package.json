@@ -1,0 +1,25 @@
+{
+    "name": "web2-lab-2",
+    "version": "1.0.0",
+    "description": "Web2: Laboratory exercise 2",
+    "main": "Vulnerability.js",
+    "scripts": {
+        "build": " npm run copy-views; npm run copy-views",
+        "clean": "rm -rf dist",
+        "copy-views": "cp -r src/views/ dist/views/",
+        "start": "node src/Vulnerability.js"
+    },
+    "keywords": [
+        "express"
+    ],
+    "author": "Web2",
+    "license": "MIT",
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "express": "^4.18.1",
+        "express-validator": "^6.4.1",
+        "pg": "^8.0.3",
+        "popups": "^1.1.3",
+        "pug": "^3.0.2"
+    }
+}
