@@ -5,18 +5,22 @@ const bodyParser = require("body-parser");
 const {Pool} = require('pg');
 
 const dotenv = require("dotenv");
-
 dotenv.config()
 
+///////////
+
+var staticPath = path.join(__dirname, 'static');
+app.use(express.static(staticPath));
+
+app.set('static', path.join(__dirname, 'static'));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-const externalUrl = process.env.RENDER_EXTERNAL_URL;
-const port = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 4080;
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(express.static('static'));
 
 const pool = new Pool({
 
@@ -30,96 +34,94 @@ const pool = new Pool({
     ssl : false
 
 
-    })
+})
 
- async function getDbSave( arg) {
+async function getDbSave( arg) {
 
-  const utakmice = [];
-  const kolo  = [];
-  const rezultat  = [];
+  const movie_name = [];
+  const direcetor  = [];
+  const genre  = [];
 
-  var argToUse = 'SELECT naziv, rezultat, kolo from utakmica WHERE kolo = ' + "'" +arg + "'";
+ 
+
+  
+  argToUse = 'SELECT movie_id, movie_name, direcetor, genre, stars, rating, imdb_ranking, awards, movie_year, movie_length  from movies'
+  
+
+
 
   console.log(argToUse)
 
 
-  const results = await pool.query(argToUse);
+  let results = await pool.query(argToUse);
+
+  var IDs = []
+  var StringCheck = ""
+
+  if(arg != undefined){
+
+   
+
+    results.rows.forEach(r => {
+
+      StringCheck = ((r["movie_name"]) + (r["direcetor"])+(r["movie_id"])+(r["genre"])+(r["stars"])+(r["rating"])+(r["imdb_ranking"])+ (r["awards"])+(r["movie_year"])+(r["movie_length"]))
+
+      if (StringCheck.includes(arg)){
+        IDs.push((r["movie_id"]))
+      }
+
+    });
+
+  }
+
   
   console.log("Database resposne ")
-  //console.log( results)
+  console.log( results)
 
-
+/*
   results.rows.forEach(r => {
-    utakmice.push(r["naziv"]);
-    });
-
-   results.rows.forEach(r => {
-    kolo.push(r["kolo"]);
-    });
-
-  results.rows.forEach(r => {
-    rezultat.push(r["rezultat"]);
-    });
-
+    movie_name.push(r["movie_name"]);
+    direcetor.push(r["direcetor"]);
+    genre.push(r["genre"]);
+  });
+*/
   
+var dataRet = []
 
-  return [utakmice,kolo,rezultat];
+results.rows.forEach(r => {
+
+  if ( ( arg == undefined ) || (arg != undefined && (r["movie_id"]) in IDs)){
+
+      dataRet.push(
+        {
+        "movie_name": (r["movie_name"]),
+        "direcetor" : (r["direcetor"]),
+        "movie_id" : (r["movie_id"]),
+        "genre" : (r["genre"]),
+        "stars" : (r["stars"]),
+        "rating" : (r["rating"]),
+        "imdb_ranking" : (r["imdb_ranking"]),
+        "awards" : (r["awards"]),
+        "movie_year" : (r["movie_year"]),
+        "movie_length" : (r["movie_length"])
+        }
+      )
+
+  }
+
+
+});
+  
+  
+  return JSON.stringify({"data" : dataRet})
+
+  //return ({"data" : dataRet}) / dataRet
+  //return [movie_name,direcetor,genre];
+ 
 }
 
-async function getDbLogin( Username,Password) {
 
-  const Usernames = [];
-  const Passwords  = [];
-  
-  var Return = false;
-  var UsernameRet = false;
 
-  var argToUse = 'SELECT username, password from Secret_table' + ' WHERE username = ' + "'" +Username + "'" + " AND " + " password = " + "'" + Password + "'";
-  var onlyUsername = 'SELECT username, password from Secret_table' + ' WHERE username = ' + "'" +Username + "'" ;
-  
-
-  console.log(argToUse)
-
-  let results = "None"
-  let ResUsername = "None"
-
-  try{
-  results = await pool.query(argToUse);
-  ResUsername = await pool.query(onlyUsername);
-
-  console.log(results.rowCount)
-
-  console.log(onlyUsername)
-  console.log(ResUsername.rowCount)
-  }
-  catch(error){
-    console.error(error);
-
-    
-  }
-  console.log("Database resposne - Logins")
-  
-
-  if(results.rowCount > 0){
-
-    Return = true
-    
-
- 
-  }
-
-  if(ResUsername.rowCount > 0){
-
-    UsernameRet = true
-    
-
- 
-  }
-  
-  
-
-  return [Return,UsernameRet];
-}
 
 
 app.get('/', async function (req, res) {
@@ -141,86 +143,49 @@ app.post('/query', async function (req , res  ) {
 
 
   console.log(req.body);
-  console.log(req.body.SQLinjection != undefined && req.body.SQLinjection == "on");
+ 
   
   
 
-  if(req.body.SQLinjection == undefined && req.body.SQLinjection != "on" && !(req.body.Query == 1 || req.body.Query == 2 || req.body.Query == 3 || req.body.Query == 4 ) ){
-
-    res.render('indexInvalidInput', {});
-
-  }
-  else {
 
 
-    const allREsult = await getDbSave(req.body.Query)
+  const data = await getDbSave(req.body.Query)
 
-    const utakmice = allREsult[0]
-    const kolo = allREsult[1]
-    const rezultat = allREsult[2]
-
-    console.log( utakmice)
     
 
-    const printrez = [];
-
-    for (let i = 0; i <= utakmice.length - 1; i++)
-          {
-
-            printrez[i] = "Kolo: " + kolo[i] + "  Utakmica: " + utakmice[i] +
-            " : " + rezultat [i]
-
-          }
+  console.log( data)
+    
+  var movie_name = data[0]
+  var direcetor = data[1]
+  var genre = data[2]
 
 
-    res.render('indexQueried', {printrez:printrez});
+  res.render('index', {data}); //movie_name,direcetor,genre
   
-  }
+  
+      
       
     
 });
 
-
-
-app.post('/login', async function (req , res  ) {
+app.get('/queryAJAX', async function (req , res  ) {
   
-
-  console.log("Login called");
-    
   console.log(req.body);
+ 
+
+  const data = await getDbSave(req.body.Query)
+
+  console.log( data)
+    
+  var movie_name = data[0]
+  var direcetor = data[1]
+  var genre = data[2]
+
+
+  //res.render('index', {data}); //movie_name,direcetor,genre
   
-  
-  
-
-  
-
-    const allREsult = await getDbLogin(req.body.Username,req.body.Password)
-
-    if(allREsult[0] == true){
-
-      res.render('secret', {}); 
-    }
-
-    if(allREsult[1] == true && req.body.BadAuth == "on"){
-      
-      console.log("Username Exists")
-      res.render('indexExists', {}); 
-    }
-
-    else if(allREsult[1] == false && req.body.BadAuth == "on"){
-      
-      console.log("Username Exists")
-      res.render('indexDoesntExist', {});  
-    }
-
-    else{
-
-      res.render('indexBadCombo', {}); 
-
-    }
-
-
-
+  res.send(data)
+    
 });
 
 
@@ -228,15 +193,7 @@ app.post('/login', async function (req , res  ) {
 
 
 
-  
-  const hostname = '127.0.0.1';
-  app.listen(port, hostname, () => {
-  console.log(`Server locally running at http://${hostname}:${port}/ and from
-  outside on ${externalUrl}`);
-  })
 
-
-/*
 app.listen(4080);
+
 module.exports = app;
-*/
