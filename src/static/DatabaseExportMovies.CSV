@@ -1,0 +1,11 @@
+movie_id,movie_name,direcetor,genre,stars,rating,imdb_ranking,awards,movie_year,movie_length
+101,The Shawshank Redemption,Frank Darabont,Drama,"Tim Robbins, Morgan Freeman, Bob Gunton",9.3,1,"7 Oscar nominations, 21 wins",1994,02:22:00
+102,The Godfather ,Francis Ford Coppola,"Drama, Crime","Marlon Brando, Al Pacino, James Caan",9.2,2,3 Oscar wins 32 other wins,1972,02:55:00
+103,The Dark Knight,Christopher Nolan,"Action, Crime, Drama, Thriller","Christian Bale, Heath Ledger, Davis S. Goyer",9.2,3,"2 Oscars, 160 other wins",2008,02:32:00
+104,The Godfather: Part II,Francis Ford Coppola,"Drama, Crime","Al Pacino, Robert De Niro, Robert Duvall",9,4,"6 Oscars, 17 other wins",1974,03:22:00
+105,12 Angry Men,Sidney Lumet,"Drama, Crime","Henry Fonda, Lee J. Cobb, Martin Balsam",9,5,"3 Oscars nominations, 17 other wins",1957,01:36:00
+106,Schindlers List,Steven Spielberg,"Biography, Drama, History","Liam Neeson, Ralph Fiennes, Ben Kinglsey",8.9,6,"7 Oscars, 91 other wins",1993,03:15:00
+107,The Lord of the Rings: The Return of the King,Peter Jackson,"Action, Adventure, Drama, Fantasy","Elijah Wood, Viggo Mortensen, Ian McKellen",8.9,7,"11 OScars, 209 other wins",2003,03:21:00
+108,Pulp Fiction,Quentin Tarantino,"Drama, Crime","John Travolta, Uma Thurman Samuel L. Jackson",8.8,8,"1 Oscar, 70 other wins",1994,02:43:00
+109,The Lord of the Rings: The Fellowship of the Ring,Peter Jackson,"Action, Adventure, Drama, Fantasy","Elijah Wood, Ian McKellen, Orlando Bloom",8.8,9,"4 Oscars, 121 other wins",2001,02:58:00
+110,"The Good, the Bad and the Ugly",Sergio Leone,"Adventure, Western","Clint Eastwood, Eli Wallach, Lee Van Cleef",8.8,10,3 wins,1966,02:28:00

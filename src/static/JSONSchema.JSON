@@ -1,0 +1,73 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "movie_name": {
+                "type": "string"
+              },
+              "direcetor": {
+                "type": "string"
+              },
+              "movie_id": {
+                "type": "integer"
+              },
+              "genre": {
+                "type": "string"
+              },
+              "stars": {
+                "type": "string"
+              },
+              "rating": {
+                "type": "number"
+              },
+              "imdb_ranking": {
+                "type": "string"
+              },
+              "awards": {
+                "type": "string"
+              },
+              "movie_year": {
+                "type": "integer"
+              },
+              "movie_length": {
+                "type": "object",
+                "properties": {
+                  "hours": {
+                    "type": "integer"
+                  },
+                  "minutes": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "hours",
+                  "minutes"
+                ]
+              }
+            },
+            "required": [
+              "movie_name",
+              "direcetor",
+              "movie_id",
+              "genre",
+              "stars",
+              "rating",
+              "imdb_ranking",
+              "awards",
+              "movie_year",
+              "movie_length"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "data"
+    ]
+  }

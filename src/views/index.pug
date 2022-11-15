@@ -70,17 +70,41 @@ html
                     { 'data': 'awards' },
                     { 'data': 'movie_year' },
                     { 'data': 'movie_length' }
-                ]
+                ],
+
+                buttons: [{ 
+
+                    text: 'JSON',
+                action: function ( e, dt, button, config ) {
+                    var data = dt.buttons.exportData();
+ 
+                    $.fn.dataTable.fileSave(
+                        new Blob( [ JSON.stringify( data ) ] ),
+                        'Export.json'
+                    );
+                }
+                
+
+
+                }]
+
+                
+
+
+            
 
             });
         });
 
 
     ul
-        | CSV dump:   
+         
+        a(href="DatabaseExportMovies.CSV") Download CSV Dump
 
     ul
-        | JSON dump:  
+        
+        a(href="MoviesJsonDump.JSON") Download JSON Dump
+  
 
 
     include includes/foot.pug
