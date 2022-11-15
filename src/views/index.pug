@@ -1,42 +1,88 @@
-html 
-    head 
-        title Vulnerabilites 
+html
+    
+    include includes/head.pug
+
+    
+    
     body
-        if username
-            h1 Welcome 
+
+    
+        
+        h1 TOP 10 rated IMDB movies
+
         ul 
             li: a(href='/', title='Home') Frontpage
+
+        
             
 
         
     form(action='/query', method='POST')
-        p
-            | Unesite broj kola(1-4): 
-            input(type='text', name='Query', value='')
-
-            input(id='SQLinjection', name='SQLinjection' type='checkbox')
-
-            | Vulnerability                  
+        p( class = "srch") 
+            | Search: 
+            input(type='text', name='Query', value='', class = "txt")
+                
 
 
-        input(type='submit', value='Send request')
+            input(type='submit', value='Send request', class = "btn")
+
+    
+    table#movie_nameTAB.display.nowrap
+        thead
+            tr  
+                th IMDB ranking
+                th #
+                th Movie Name
+                th Director
+                th Genre
+                th Rating
+                th Stars
+                th Awards
+                th Movie Year
+                th Movie Length
 
 
-    form(action='/login', method='POST')
-        p
-            | Username: 
-            input(type='text', name='Username', value='')
+    script(type="text/javascript", src="https://code.jquery.com/jquery-3.5.1.js")
+    script(src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js")
+    
+    script.
+        console.log("From the view")
+       
+        // Initialize the DataTable
+        $(document).ready(function () {
+            $('#movie_nameTAB').DataTable({
+                //lengthMenu: [ 3, 5, 10 ],
+                // Set the starting row
+                // of the DataTable
+                //displayStart: 1
+                "ajax": { url:'/queryAJAX',
+                            dataSrc:'data'
+                },
 
-            | Password: 
-            input(type='text', name='Password', value='')
+                "columns": [
+                    { 'data': 'imdb_ranking' },
+                    { 'data': 'movie_id' },
+                    { 'data': 'movie_name' },
+                    { 'data': 'direcetor' },
+                    { 'data': 'genre' },
+                    { 'data': 'rating' },
+                    { 'data': 'stars' },
+                    { 'data': 'awards' },
+                    { 'data': 'movie_year' },
+                    { 'data': 'movie_length' }
+                ]
 
-            input(id='BadAuth', name='BadAuth' type='checkbox')
-
-            | Vulnerability               
-
-
-        input(type='submit', value='Send request')
+            });
+        });
 
 
+    ul
+        | CSV dump:   
+
+    ul
+        | JSON dump:  
+
+
+    include includes/foot.pug
         
         
