@@ -4,8 +4,12 @@ var path = require('path');
 const bodyParser = require("body-parser");
 const {Pool} = require('pg');
 
-const dotenv = require("dotenv");
-dotenv.config()
+const fs = require('fs');
+const https = require('https');
+const { auth, requiresAuth } = require('express-openid-connect'); 
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 ///////////
 
@@ -34,6 +38,25 @@ function QueryStringToJSON(location) {
   return JSON.parse(JSON.stringify(result));
 }
 
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+const port = 4080;
+
+
+const config = { 
+  authRequired : false,
+  idpLogout : true, //login not only from the app, but also from identity provider
+  secret: process.env.SECRET,
+  baseURL:  externalUrl || `https://localhost:${port}`,
+  clientID: process.env.CLIENT_ID,
+  issuerBaseURL: 'https://dev-k7agtw8lpentcvyy.eu.auth0.com',
+  clientSecret: process.env.CLIENT_SECRET,
+  authorizationParams: {
+    response_type: 'code' ,
+    //scope: "openid profile email"   
+   },
+};
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config))
 
 const pool = new Pool({
 
@@ -384,10 +407,28 @@ WHERE
 
 app.get('/', async function (req, res) {
   
+  let username;
+  if (req.oidc.isAuthenticated()) {
+    username = req.oidc.user?.name ?? req.oidc.user?.sub;
+  }
 
     
-  res.set({'Content-Type': 'application/nodejs + pug; charset=utf-8'});
-  res.render('index', {}); //printrez:printrez
+  //res.set({'Content-Type': 'application/nodejs + pug; charset=utf-8'});
+  res.render('index', {username}); //printrez:printrez
+});
+
+app.get('/auth', (req, res) => {
+  res.oidc.login({
+    returnTo: '/',
+    authorizationParams: {      
+      screen_hint: "signup",
+    },
+  });
+});
+
+app.get('/profile', requiresAuth(), function (req, res) {       
+  const user = JSON.stringify(req.oidc.user);      
+  res.render('profile', {user}); 
 });
 
 
@@ -770,7 +811,14 @@ app.get('/queryAJAX', async function (req , res  ) {
 
 
 
-
+/*
 app.listen(4080);
 
 module.exports = app;
+*/
+
+const hostname = '127.0.0.1';
+  app.listen(port, hostname, () => {
+  console.log(`Server locally running at http://${hostname}:${port}/ and from
+  outside on ${externalUrl}`);
+  })
