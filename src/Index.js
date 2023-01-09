@@ -434,8 +434,17 @@ app.get('/profile', requiresAuth(), function (req, res) {
 
 app.get('/collection', async function (req, res) {
 
-  const data = await getDbSave()
+  var dataDB = await getDbSave()
 
+  var dirContext = {
+    "@context": {
+    "@vocab": "http://schema.org/",
+    "movie_name": "name of the movie",
+    "rating": "IMDB rating of the movie",
+    }
+  }
+
+  var data = Object.assign(dataDB,dirContext)
 
   dataret = JSON.parse(data)
 
@@ -448,8 +457,17 @@ app.get('/collection', async function (req, res) {
 
 app.get('/ids', async function (req, res) {
 
-  const data = await getDbIDS()
+  var dataDB = await getDbIDS()
 
+  var dirContext = {
+    "@context": {
+    "@vocab": "http://schema.org/",
+    "IDS": "IDS of all the movies in the database",
+    "IDS[x]": "ID of a specific movie, can be used to fetch it from database by .../IDS[x] "
+    }
+  }
+
+  var data = Object.assign(dataDB,dirContext)
 
   
   res.type("application/json")
@@ -461,8 +479,17 @@ app.get('/ids', async function (req, res) {
 
 app.get('/actors', async function (req, res) {
 
-  const data = await getDbActors()
+  var dataDB = await getDbActors()
 
+  var dirContext = {
+    "@context": {
+    "@vocab": "http://schema.org/",
+    "Actors": "Names of all the actors in the database",
+    "Actor[x]": "https://schema.org/name"
+    }
+  }
+
+  var data = Object.assign(dataDB,dirContext)
 
   
 
@@ -476,9 +503,17 @@ app.get('/actors', async function (req, res) {
 
 app.get('/directors', async function (req, res) {
 
-  const data = await getDbDirectors()
+  var dataDB = await getDbDirectors()
 
+  var dirContext = {
+    "@context": {
+    "@vocab": "http://schema.org/",
+    "Directors": "Names of all the directors in the database",
+    "Directors[x]": "https://schema.org/name"
+    }
+  }
 
+  var data = Object.assign(dataDB,dirContext)
   
   res.type("application/json")
   res.status(200).json({ status: "OK",
@@ -622,9 +657,21 @@ app.get('/:id', async function (req, res) {
 
   }
   else{
-  
-    const data = await getDbID(req.params.id)
+    //var data = await getDbID(req.params.id)
 
+    
+    var dataDB = await getDbID(req.params.id)
+
+    var dirContext = {
+      "@context": {
+      "@vocab": "http://schema.org/",
+      "head": "https://schema.org/Movie",
+      "movie_name": "https://schema.org/name",
+      "hint": "Use IDs above 100"
+      }
+    }
+
+    var data = Object.assign(dataDB,dirContext)
     
 
     res.type("application/json")
